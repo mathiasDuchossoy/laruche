@@ -27,7 +27,11 @@ class StockController extends AbstractController
             throw new BadRequestHttpException('"file" is required');
         }
 
-        if ('text/csv' !== $uploadedFile->getClientMimeType()) {
+        $fileName = $uploadedFile->getClientOriginalName();
+        $array = explode(".", $fileName);
+        $extension = end($array);
+
+        if ('csv' !== $extension) {
             throw new BadRequestHttpException('csv file is required');
         }
 
