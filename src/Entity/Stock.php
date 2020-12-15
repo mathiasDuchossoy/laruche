@@ -83,8 +83,25 @@ class Stock
      */
     protected $id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Gift::class, inversedBy="stock")
+     */
+    private $gift;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getGift(): ?Gift
+    {
+        return $this->gift;
+    }
+
+    public function setGift(?Gift $gift): self
+    {
+        $this->gift = $gift;
+
+        return $this;
     }
 }
