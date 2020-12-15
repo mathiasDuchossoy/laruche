@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\StockController;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -84,23 +86,46 @@ class Stock
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Gift::class, inversedBy="stock")
+     * @ORM\OneToMany(targetEntity=Gift::class, mappedBy="stock", cascade={"persist", "remove"}, orphanRemoval=true)
      */
-    private $gift;
+    private $gifts;
+
+    public function __construct()
+    {
+        $this->gifts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getGift(): ?Gift
+    /**
+     * @return Collection|Gift[]
+     */
+    public function getGifts(): Collection
     {
-        return $this->gift;
+        return $this->gifts;
     }
 
-    public function setGift(?Gift $gift): self
+    public function addGift(Gift $gift): self
     {
-        $this->gift = $gift;
+        if (!$this->gifts->contains($gift)) {
+            $this->gifts[] = $gift;
+            $gift->setStock($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGift(Gift $gift): self
+    {
+        if ($this->gifts->removeElement($gift)) {
+            // set the owning side to null (unless already changed)
+            if ($gift->getStock() === $this) {
+                $gift->setStock(null);
+            }
+        }
 
         return $this;
     }

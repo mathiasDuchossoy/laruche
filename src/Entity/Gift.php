@@ -24,7 +24,7 @@ class Gift
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $code;
 
@@ -34,29 +34,39 @@ class Gift
     private $description;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="gift")
-     */
-    private $stock;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Receiver::class, mappedBy="gifts")
+     * @ORM\ManyToMany(targetEntity=Receiver::class, mappedBy="gifts", cascade={"persist", "remove"})
      */
     private $receivers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Stock::class, inversedBy="gifts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $stock;
+
     public function __construct()
     {
-        $this->stock = new ArrayCollection();
         $this->receivers = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     * @return Gift
+     */
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getCode(): ?string
@@ -64,7 +74,7 @@ class Gift
         return $this->code;
     }
 
-    public function setCode(string $code): self
+    public function setCode(?string $code): self
     {
         $this->code = $code;
 
@@ -88,39 +98,9 @@ class Gift
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(?string $price): self
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Stock[]
-     */
-    public function getStock(): Collection
-    {
-        return $this->stock;
-    }
-
-    public function addStock(Stock $stock): self
-    {
-        if (!$this->stock->contains($stock)) {
-            $this->stock[] = $stock;
-            $stock->setGift($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStock(Stock $stock): self
-    {
-        if ($this->stock->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
-            if ($stock->getGift() === $this) {
-                $stock->setGift(null);
-            }
-        }
 
         return $this;
     }
@@ -148,6 +128,18 @@ class Gift
         if ($this->receivers->removeElement($receiver)) {
             $receiver->removeGift($this);
         }
+
+        return $this;
+    }
+
+    public function getStock(): ?Stock
+    {
+        return $this->stock;
+    }
+
+    public function setStock(?Stock $stock): self
+    {
+        $this->stock = $stock;
 
         return $this;
     }
