@@ -86,7 +86,7 @@ class Stock
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Gift::class, mappedBy="stock", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Gift::class, mappedBy="stock", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $gifts;
 

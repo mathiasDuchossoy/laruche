@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20201215021257 extends AbstractMigration
+final class Version20201215025809 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -21,10 +21,10 @@ final class Version20201215021257 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE gift (id BLOB NOT NULL --(DC2Type:uuid)
-        , stock_id INTEGER NOT NULL, code VARCHAR(255) NOT NULL, description CLOB DEFAULT NULL, price DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
+        , stock_id INTEGER NOT NULL, code VARCHAR(255) DEFAULT NULL, description CLOB DEFAULT NULL, price VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_A47C990DDCD6110 ON gift (stock_id)');
         $this->addSql('CREATE TABLE receiver (id BLOB NOT NULL --(DC2Type:uuid)
-        , first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, country_code VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
+        , first_name VARCHAR(255) DEFAULT NULL, last_name VARCHAR(255) DEFAULT NULL, country_code VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE receiver_gift (receiver_id BLOB NOT NULL --(DC2Type:uuid)
         , gift_id BLOB NOT NULL --(DC2Type:uuid)
         , PRIMARY KEY(receiver_id, gift_id))');

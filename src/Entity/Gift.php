@@ -24,7 +24,7 @@ class Gift
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $code;
 
@@ -34,12 +34,12 @@ class Gift
     private $description;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $price;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Receiver::class, mappedBy="gifts")
+     * @ORM\ManyToMany(targetEntity=Receiver::class, mappedBy="gifts", cascade={"persist", "remove"})
      */
     private $receivers;
 
@@ -54,9 +54,19 @@ class Gift
         $this->receivers = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     * @return Gift
+     */
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getCode(): ?string
@@ -64,7 +74,7 @@ class Gift
         return $this->code;
     }
 
-    public function setCode(string $code): self
+    public function setCode(?string $code): self
     {
         $this->code = $code;
 
@@ -88,7 +98,7 @@ class Gift
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(?string $price): self
     {
         $this->price = $price;
 
