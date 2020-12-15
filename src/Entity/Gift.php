@@ -39,18 +39,18 @@ class Gift
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity=Stock::class, mappedBy="gift")
-     */
-    private $stock;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Receiver::class, mappedBy="gifts")
      */
     private $receivers;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Stock::class, inversedBy="gifts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $stock;
+
     public function __construct()
     {
-        $this->stock = new ArrayCollection();
         $this->receivers = new ArrayCollection();
     }
 
@@ -96,36 +96,6 @@ class Gift
     }
 
     /**
-     * @return Collection|Stock[]
-     */
-    public function getStock(): Collection
-    {
-        return $this->stock;
-    }
-
-    public function addStock(Stock $stock): self
-    {
-        if (!$this->stock->contains($stock)) {
-            $this->stock[] = $stock;
-            $stock->setGift($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStock(Stock $stock): self
-    {
-        if ($this->stock->removeElement($stock)) {
-            // set the owning side to null (unless already changed)
-            if ($stock->getGift() === $this) {
-                $stock->setGift(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Receiver[]
      */
     public function getReceivers(): Collection
@@ -148,6 +118,18 @@ class Gift
         if ($this->receivers->removeElement($receiver)) {
             $receiver->removeGift($this);
         }
+
+        return $this;
+    }
+
+    public function getStock(): ?Stock
+    {
+        return $this->stock;
+    }
+
+    public function setStock(?Stock $stock): self
+    {
+        $this->stock = $stock;
 
         return $this;
     }
