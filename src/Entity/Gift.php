@@ -2,16 +2,35 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\GiftRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidV4Generator;
 
+
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={
+ *         "get"={
+ *              "openapi_context" = {
+ *                  "parameters" = {
+ *                      {
+ *                          "name" = "stock",
+ *                          "in" = "query",
+ *                          "required" = "true",
+ *                          "type" : "integer"
+ *                      }
+ *                  }
+ *               }
+ *          }
+ *     }
+ * )
  * @ORM\Entity(repositoryClass=GiftRepository::class)
+ * @ApiFilter(SearchFilter::class, properties={"stock": "exact"})
  */
 class Gift
 {
@@ -93,7 +112,7 @@ class Gift
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getPrice(): ?string
     {
         return $this->price;
     }

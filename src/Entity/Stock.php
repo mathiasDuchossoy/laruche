@@ -50,7 +50,8 @@ use App\Repository\StockRepository;
  *         "get"
  *     },
  *     itemOperations={
- *         "get"
+ *         "get",
+ *         "api_stocks_get_statistics"={"route_name"="api_stocks_get_statistics"},
  *     }
  * )
  * @Vich\Uploadable
