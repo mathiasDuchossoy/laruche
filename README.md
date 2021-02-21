@@ -1,5 +1,11 @@
 # Stock management of Santa Claus.
 
+## Installation preview
+
+https://getcomposer.org/download/
+https://www.php.net/manual/fr/install.php
+
+
 ## Installation
 
 Copy the the .env
@@ -14,6 +20,8 @@ $ composer install
 ```
 
 Create and install the database.
+
+
 The db will be create with sqlite (you have to enable the extension in php.ini) in the folder "var/data.db"
 ```bash
 $ php bin/console doctrine:database:create
